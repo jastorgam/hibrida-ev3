@@ -1,13 +1,58 @@
-import { Component } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/standalone';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonSearchbar,
+  SearchbarInputEventDetail,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonImg,
+} from '@ionic/angular/standalone';
+import { IonSearchbarCustomEvent } from '@ionic/core';
+import { Feature } from 'src/app/models/open-trip.model';
+import { OpenTripMapService } from 'src/app/services/open-trip-map.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent],
+  imports: [
+    IonicModule,
+    CommonModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonSearchbar,
+    IonList,
+    IonItem,
+    IonLabel,
+    IonImg,
+  ],
 })
-export class HomePage {
-  constructor() {}
+export class HomePage implements OnInit {
+  places: Feature[] = [];
+  isLoading = false;
+
+  constructor(private openTripService: OpenTripMapService) {}
+
+  ngOnInit(): void {
+    console.log('HomePage', 'Init');
+  }
+
+  async handleInput(
+    $event: IonSearchbarCustomEvent<SearchbarInputEventDetail>
+  ) {
+    this.isLoading = true;
+    const searchInput = $event.detail.value ?? '';
+    this.places = await this.openTripService.getPlaces(searchInput);
+    console.log('Places', this.places);
+    this.isLoading = false;
+  }
 }

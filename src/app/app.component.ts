@@ -13,8 +13,6 @@ export class AppComponent implements OnInit {
   constructor(private openTripService: OpenTripMapService) {}
 
   async ngOnInit() {
-    console.log('prueba');
-    const lugares = await this.openTripService.getLugares('concepcion');
-    console.log(lugares);
+    console.log('AppComponent', 'Init');
   }
 }
