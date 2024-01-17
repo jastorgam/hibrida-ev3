@@ -1,3 +1,5 @@
+// @import '../../../assets/ionicons/dist/';
+
 #container {
   text-align: center;
 
@@ -31,4 +33,13 @@ ion-img::part(image) {
   height: 80px;
   overflow: hidden;
   object-fit: cover;
+}
+
+.label-precio {
+  padding-left: 10px;
+  text-align: center;
+}
+
+ion-icon {
+  padding-left: 10px;
 }

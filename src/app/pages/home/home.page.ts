@@ -12,8 +12,11 @@ import {
   IonItem,
   IonLabel,
   IonImg,
+  IonIcon,
 } from '@ionic/angular/standalone';
 import { IonSearchbarCustomEvent } from '@ionic/core';
+import { addIcons } from 'ionicons';
+import { cameraOutline, airplaneOutline, trashOutline } from 'ionicons/icons';
 import { Feature } from 'src/app/models/open-trip.model';
 import { OpenTripMapService } from 'src/app/services/open-trip-map.service';
 
@@ -34,13 +37,16 @@ import { OpenTripMapService } from 'src/app/services/open-trip-map.service';
     IonItem,
     IonLabel,
     IonImg,
+    IonIcon,
   ],
 })
 export class HomePage implements OnInit {
   places: Feature[] = [];
   isLoading = false;
 
-  constructor(private openTripService: OpenTripMapService) {}
+  constructor(private openTripService: OpenTripMapService) {
+    addIcons({ airplaneOutline, cameraOutline, trashOutline });
+  }
 
   ngOnInit(): void {
     console.log('HomePage', 'Init');

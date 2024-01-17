@@ -13,13 +13,17 @@
   <ion-list>
     <ion-item *ngFor="let place of places">
       <ion-img
+        slot="start"
         [src]="place.xidInfo?.preview?.source ?? '/assets/images/Simple-Image-Not-Found-Icon.png'"
       ></ion-img>
-      <ion-label
-        >{{place.properties.name}}<br />
-        <strong>{{place.xidInfo?.address?.country}}</strong></ion-label
-      >
-      <ion-label>prueba</ion-label>
+      <ion-label>
+        <h5>{{place.properties.name}}</h5>
+        <p><strong>{{place.xidInfo?.address?.country}}</strong></p>
+      </ion-label>
+      <ion-icon aria-hidden="true" name="airplane-outline"></ion-icon>
+      <ion-label class="label-precio">$400.00</ion-label>
+      <ion-icon aria-hidden="true" name="camera-outline"></ion-icon>
+      <ion-icon aria-hidden="true" name="trash-outline"></ion-icon>
     </ion-item>
   </ion-list>
 </ion-content>
