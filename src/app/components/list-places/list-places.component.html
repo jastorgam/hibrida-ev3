@@ -1,0 +1,37 @@
+<ion-item>
+  <ion-img
+    slot="start"
+    [src]="
+      place.xidInfo?.preview?.source ??
+      '/assets/images/Simple-Image-Not-Found-Icon.png'
+    "
+  ></ion-img>
+  <ion-label>
+    <h5>{{ place.properties.name }}</h5>
+    <p>
+      <strong>{{ place.xidInfo?.address?.country }}</strong>
+    </p>
+  </ion-label>
+  <ion-icon
+    aria-hidden="true"
+    name="airplane-outline"
+    [id]="place.properties.xid"
+    expand="block"
+  ></ion-icon>
+  <ion-label class="label-precio">{{ price }}</ion-label>
+  <ion-icon
+    aria-hidden="true"
+    name="camera-outline"
+    (click)="takePhoto()"
+  ></ion-icon>
+  <ion-icon
+    aria-hidden="true"
+    name="trash-outline"
+    (click)="onDeletePrice(place)"
+  ></ion-icon>
+  <app-travel-value
+    [nameModal]="place.properties.xid"
+    (savePrice)="onSavePrice($event)"
+    [place]="place"
+  ></app-travel-value>
+</ion-item>

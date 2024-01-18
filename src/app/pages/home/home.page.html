@@ -5,25 +5,14 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-searchbar
-    [debounce]="2000"
-    (ionInput)="handleInput($event)"
-  ></ion-searchbar>
+  <app-search-bar (addPlace)="addPlace($event)"></app-search-bar>
 
   <ion-list>
-    <ion-item *ngFor="let place of places">
-      <ion-img
-        slot="start"
-        [src]="place.xidInfo?.preview?.source ?? '/assets/images/Simple-Image-Not-Found-Icon.png'"
-      ></ion-img>
-      <ion-label>
-        <h5>{{place.properties.name}}</h5>
-        <p><strong>{{place.xidInfo?.address?.country}}</strong></p>
-      </ion-label>
-      <ion-icon aria-hidden="true" name="airplane-outline"></ion-icon>
-      <ion-label class="label-precio">$400.00</ion-label>
-      <ion-icon aria-hidden="true" name="camera-outline"></ion-icon>
-      <ion-icon aria-hidden="true" name="trash-outline"></ion-icon>
-    </ion-item>
+    <app-list-places
+      *ngFor="let place of places"
+      [place]="place"
+      (savePrice)="onSavePrice($event)"
+      (deletePlace)="onDeletePlace($event)"
+    ></app-list-places>
   </ion-list>
 </ion-content>

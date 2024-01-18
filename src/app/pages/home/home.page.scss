@@ -28,18 +28,3 @@
   text-decoration: none;
 }
 
-ion-img::part(image) {
-  width: 80px;
-  height: 80px;
-  overflow: hidden;
-  object-fit: cover;
-}
-
-.label-precio {
-  padding-left: 10px;
-  text-align: center;
-}
-
-ion-icon {
-  padding-left: 10px;
-}

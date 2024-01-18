@@ -2,23 +2,25 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
-  IonSearchbar,
-  SearchbarInputEventDetail,
-  IonList,
+  IonHeader,
+  IonIcon,
+  IonImg,
   IonItem,
   IonLabel,
-  IonImg,
-  IonIcon,
+  IonList,
+  IonSearchbar,
+  IonTitle,
+  IonToolbar,
 } from '@ionic/angular/standalone';
-import { IonSearchbarCustomEvent } from '@ionic/core';
 import { addIcons } from 'ionicons';
-import { cameraOutline, airplaneOutline, trashOutline } from 'ionicons/icons';
+import { airplaneOutline, cameraOutline, trashOutline } from 'ionicons/icons';
+import { ListPlacesComponent } from 'src/app/components/list-places/list-places.component';
+import { SearchBarComponent } from 'src/app/components/search-bar/search-bar.component';
+import { TravelValueComponent } from 'src/app/components/travel-value/travel-value.component';
 import { Feature } from 'src/app/models/open-trip.model';
 import { OpenTripMapService } from 'src/app/services/open-trip-map.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-home',
@@ -38,27 +40,39 @@ import { OpenTripMapService } from 'src/app/services/open-trip-map.service';
     IonLabel,
     IonImg,
     IonIcon,
+    TravelValueComponent,
+    SearchBarComponent,
+    ListPlacesComponent,
   ],
 })
 export class HomePage implements OnInit {
   places: Feature[] = [];
   isLoading = false;
 
-  constructor(private openTripService: OpenTripMapService) {
+  constructor(
+    private openTripService: OpenTripMapService,
+    private storageService: StorageService
+  ) {
     addIcons({ airplaneOutline, cameraOutline, trashOutline });
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     console.log('HomePage', 'Init');
+    this.places = await this.storageService.getPlaces();
   }
 
-  async handleInput(
-    $event: IonSearchbarCustomEvent<SearchbarInputEventDetail>
-  ) {
-    this.isLoading = true;
-    const searchInput = $event.detail.value ?? '';
-    this.places = await this.openTripService.getPlaces(searchInput);
-    console.log('Places', this.places);
-    this.isLoading = false;
+  async onSavePrice($event: Feature) {
+    await this.storageService.savePlace($event);
+    this.places = await this.storageService.getPlaces();
+  }
+
+  async addPlace($event: Feature) {
+    await this.storageService.savePlace($event);
+    this.places = await this.storageService.getPlaces();
+  }
+
+  async onDeletePlace($event: Feature) {
+    await this.storageService.deletePlace($event);
+    this.places = await this.storageService.getPlaces();
   }
 }

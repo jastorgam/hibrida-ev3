@@ -13,6 +13,7 @@ export interface Feature {
   id: string;
   geometry: Geometry;
   properties: Properties;
+  price: number;
 }
 
 export interface Geometry {
