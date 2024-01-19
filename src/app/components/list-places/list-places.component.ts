@@ -1,7 +1,13 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { IonIcon, IonImg, IonItem, IonLabel } from '@ionic/angular/standalone';
+import {
+  ActionSheetController,
+  IonIcon,
+  IonImg,
+  IonItem,
+  IonLabel,
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { airplaneOutline, cameraOutline, trashOutline } from 'ionicons/icons';
 import { Feature } from 'src/app/models/open-trip.model';
@@ -22,7 +28,10 @@ export class ListPlacesComponent implements OnInit {
   @Output() deletePlace: EventEmitter<Feature> = new EventEmitter();
   @Output() saveImage: EventEmitter<Feature> = new EventEmitter();
 
-  constructor(private currencyPipe: CurrencyPipe) {}
+  constructor(
+    private currencyPipe: CurrencyPipe,
+    private actionSheetCtrl: ActionSheetController
+  ) {}
 
   get price(): string {
     return this.currencyPipe.transform(this.place.price, 'USD') ?? '';
@@ -37,8 +46,26 @@ export class ListPlacesComponent implements OnInit {
     this.savePrice.emit($event);
   }
 
-  onDeletePrice(place: Feature) {
-    this.deletePlace.emit(place);
+  async onDeletePlace(place: Feature) {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: 'Esta seguro?',
+      buttons: [
+        {
+          text: 'Si',
+          role: 'confirm',
+        },
+        {
+          text: 'No',
+          role: 'cancel',
+        },
+      ],
+    });
+
+    actionSheet.present();
+
+    const { role } = await actionSheet.onWillDismiss();
+
+    if (role === 'confirm') this.deletePlace.emit(place);
   }
 
   async takePhoto() {
