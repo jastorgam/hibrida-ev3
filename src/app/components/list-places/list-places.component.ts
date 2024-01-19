@@ -11,8 +11,8 @@ import {
 import { addIcons } from 'ionicons';
 import { airplaneOutline, cameraOutline, trashOutline } from 'ionicons/icons';
 import { Feature } from 'src/app/models/open-trip.model';
-import { TravelValueComponent } from '../travel-value/travel-value.component';
 import { environment } from 'src/environments/environment';
+import { TravelValueComponent } from '../travel-value/travel-value.component';
 
 @Component({
   selector: 'app-list-places',
