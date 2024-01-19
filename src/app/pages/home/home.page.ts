@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
 import {
   IonContent,
   IonHeader,
@@ -19,8 +18,8 @@ import { ListPlacesComponent } from 'src/app/components/list-places/list-places.
 import { SearchBarComponent } from 'src/app/components/search-bar/search-bar.component';
 import { TravelValueComponent } from 'src/app/components/travel-value/travel-value.component';
 import { Feature } from 'src/app/models/open-trip.model';
-import { OpenTripMapService } from 'src/app/services/open-trip-map.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -28,7 +27,6 @@ import { StorageService } from 'src/app/services/storage.service';
   styleUrls: ['home.page.scss'],
   standalone: true,
   imports: [
-    IonicModule,
     CommonModule,
     IonHeader,
     IonToolbar,
@@ -49,16 +47,12 @@ export class HomePage implements OnInit {
   places: Feature[] = [];
   isLoading = false;
 
-  constructor(
-    private openTripService: OpenTripMapService,
-    private storageService: StorageService
-  ) {
-    addIcons({ airplaneOutline, cameraOutline, trashOutline });
-  }
+  constructor(private storageService: StorageService) {}
 
   async ngOnInit(): Promise<void> {
-    console.log('HomePage', 'Init');
+    if (!environment.production) console.log('HomePage', 'Init');
     this.places = await this.storageService.getPlaces();
+    addIcons({ airplaneOutline, cameraOutline, trashOutline });
   }
 
   async onSavePrice($event: Feature) {
@@ -73,6 +67,11 @@ export class HomePage implements OnInit {
 
   async onDeletePlace($event: Feature) {
     await this.storageService.deletePlace($event);
+    this.places = await this.storageService.getPlaces();
+  }
+
+  async onSaveImage($event: Feature) {
+    await this.storageService.savePlace($event);
     this.places = await this.storageService.getPlaces();
   }
 }

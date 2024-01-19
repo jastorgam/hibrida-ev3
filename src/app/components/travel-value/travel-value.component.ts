@@ -14,9 +14,9 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
 import {
   IonButton,
+  IonButtons,
   IonContent,
   IonHeader,
   IonInput,
@@ -24,10 +24,12 @@ import {
   IonList,
   IonModal,
   IonText,
+  IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { IonModalCustomEvent, OverlayEventDetail } from '@ionic/core';
 import { Feature } from 'src/app/models/open-trip.model';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-travel-value',
@@ -35,7 +37,6 @@ import { Feature } from 'src/app/models/open-trip.model';
   styleUrls: ['./travel-value.component.scss'],
   standalone: true,
   imports: [
-    IonicModule,
     CommonModule,
     FormsModule,
     IonModal,
@@ -48,6 +49,8 @@ import { Feature } from 'src/app/models/open-trip.model';
     IonButton,
     ReactiveFormsModule,
     IonText,
+    IonButtons,
+    IonTitle,
   ],
 })
 export class TravelValueComponent implements OnInit {
@@ -61,7 +64,7 @@ export class TravelValueComponent implements OnInit {
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
-    console.log('TravelValueComponent', 'Init');
+    if (!environment.production) console.log('TravelValueComponent', 'Init');
     this.miFormulario = this.formBuilder.group({
       price: [
         this.place.price,

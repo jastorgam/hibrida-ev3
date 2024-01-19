@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
 import {
   IonIcon,
+  IonImg,
   IonItem,
   IonLabel,
   IonList,
@@ -10,11 +11,11 @@ import {
   SearchbarInputEventDetail,
 } from '@ionic/angular/standalone';
 import { IonSearchbarCustomEvent } from '@ionic/core';
+import { addIcons } from 'ionicons';
+import { addCircleOutline } from 'ionicons/icons';
 import { Feature } from 'src/app/models/open-trip.model';
 import { OpenTripMapService } from 'src/app/services/open-trip-map.service';
-import { addCircleOutline } from 'ionicons/icons';
-import { addIcons } from 'ionicons';
-import { FormsModule } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-search-bar',
@@ -22,14 +23,14 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./search-bar.component.scss'],
   standalone: true,
   imports: [
-    IonicModule,
     IonSearchbar,
     IonList,
     IonItem,
     IonLabel,
     IonIcon,
+    IonImg,
     CommonModule,
-    FormsModule
+    FormsModule,
   ],
 })
 export class SearchBarComponent implements OnInit {
@@ -39,7 +40,7 @@ export class SearchBarComponent implements OnInit {
   constructor(private openTripService: OpenTripMapService) {}
 
   ngOnInit() {
-    console.log('SearchBarComponent', 'Init');
+    if (!environment.production) console.log('SearchBarComponent', 'Init');
     addIcons({ addCircleOutline });
   }
 
@@ -47,12 +48,16 @@ export class SearchBarComponent implements OnInit {
     $event: IonSearchbarCustomEvent<SearchbarInputEventDetail>
   ) {
     const searchInput = $event.detail.value ?? '';
-    this.places = await this.openTripService.getPlaces(searchInput);
-    console.log('Places', this.places);
+    if (searchInput != '') {
+      this.places = await this.openTripService.getPlaces(searchInput);
+      console.log('Places', this.places);
+    } else {
+      this.places = [];
+    }
   }
 
   onAddPlace(place: Feature) {
     this.addPlace.emit(place);
-    this.places = [];
+    // this.places = [];
   }
 }

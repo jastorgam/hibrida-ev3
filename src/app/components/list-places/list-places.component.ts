@@ -1,33 +1,26 @@
+import { CurrencyPipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { IonicModule } from '@ionic/angular';
 import { IonIcon, IonImg, IonItem, IonLabel } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { airplaneOutline, cameraOutline, trashOutline } from 'ionicons/icons';
 import { Feature } from 'src/app/models/open-trip.model';
 import { TravelValueComponent } from '../travel-value/travel-value.component';
-import { CurrencyPipe } from '@angular/common';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-list-places',
   templateUrl: './list-places.component.html',
   styleUrls: ['./list-places.component.scss'],
   standalone: true,
-  imports: [
-    IonicModule,
-    IonItem,
-    IonIcon,
-    IonLabel,
-    TravelValueComponent,
-    IonImg,
-  ],
+  imports: [IonItem, IonIcon, IonLabel, TravelValueComponent, IonImg],
   providers: [CurrencyPipe],
 })
 export class ListPlacesComponent implements OnInit {
   @Input() place!: Feature;
   @Output() savePrice: EventEmitter<Feature> = new EventEmitter();
   @Output() deletePlace: EventEmitter<Feature> = new EventEmitter();
-  private _price?: string;
+  @Output() saveImage: EventEmitter<Feature> = new EventEmitter();
 
   constructor(private currencyPipe: CurrencyPipe) {}
 
@@ -36,7 +29,7 @@ export class ListPlacesComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('ListPlacesComponent', 'Init');
+    if (!environment.production) console.log('ListPlacesComponent', 'Init');
     addIcons({ airplaneOutline, cameraOutline, trashOutline });
   }
 
@@ -69,6 +62,8 @@ export class ListPlacesComponent implements OnInit {
           this.place.xidInfo.preview.source = imageUrl;
         }
       }
+
+      this.saveImage.emit(this.place);
 
       console.log(imageUrl);
     } catch (error) {
