@@ -91,10 +91,9 @@ export class ListPlacesComponent implements OnInit {
       }
 
       this.saveImage.emit(this.place);
-
-      console.log(imageUrl);
+      // console.log(imageUrl);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   }
 }
